@@ -1,8 +1,4 @@
 <?php
-header('Access-Control-Allow-Origin', 'some url');
-header('Allow', 'GET, POST, OPTIONS');
-header('Access-Control-Allow-Headers', 'Origin, Content-Type, Accept, Authorization, X-Request-With');
-header('Access-Control-Allow-Credentials', 'true');
 
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Http\Request;
