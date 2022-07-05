@@ -117,7 +117,7 @@ class AuthController extends Controller
     if(!$mail->Send()) {
         $respesta= "Error al enviar el mensaje: " . $mail->ErrorInfo;
     }else{
-        $respesta="mensaje enviado correctamente ";
+        $respesta="mensaje enviado correctamente". $request->email;
     }
     return response()->json([
         
