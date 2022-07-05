@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-
+use DB;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 class AuthController extends Controller
 {
     public  function  register(Request $request){
@@ -82,4 +84,52 @@ class AuthController extends Controller
                 'user'  => Auth::user(),
             ]);
           }
+  public function  recoverypass(Request $request){
+    require base_path("vendor/autoload.php");
+    $mail =  new PHPMailer();
+    $rand = range(1, 13);
+    $nvpassword="";
+    shuffle($rand);
+    foreach ($rand as $val) {
+    $nvpassword.=$val;
+    }
+
+    $data = User::where('email', '=', $request->email)->get();
+    //print_r($data);
+    $iduser=$data[0]['id'];
+     //echo $iduser;
+    $updateUser= DB::table('users')->where("id",$iduser)->update(["password"=>$nvpassword]);
+       
+    //return $updateUser;
+ if ($updateUser==1){
+
+    $asunto="recuperacion de contraseña";
+    $mail->SetFrom('notificaciones@fedeltamall.com', 'fedeltamall');
+    $addres = $request->email;
+    //$mail->AddAttachment($nombre);
+    $mail->Subject = $asunto;
+    //la a���ado a la clase, indicando el nombre de la persona destinatario
+    $mail->AddAddress($addres, "Fedeltamall");
+    $body="<p> Buen dia, 
+    <br><br>
+     su Contraseña provisional  es ".$nvpassword." Porfavor cambiarla una vez inicie sesion.  </p>";
+    $mail->MsgHTML($body);
+    if(!$mail->Send()) {
+        $respesta= "Error al enviar el mensaje: " . $mail->ErrorInfo;
+    }else{
+        $respesta="mensaje enviado correctamente ";
+    }
+    return response()->json([
+        
+        'respuesta'  => $respesta,
+    ]);
+   
+
+
+ }  
+
+
+  } 
+
+
 }

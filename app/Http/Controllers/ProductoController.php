@@ -51,6 +51,8 @@ class ProductoController extends Controller
             ->with('success', 'Producto created successfully.');
     } 
  public function allproductTienda(Request $request){
+   //print_r($_POST);
+     //die();
     $tienda = $request->input('idtienda'); 
    
     $productoTienda= producto ::where('idtienda', '=', $tienda)->get();

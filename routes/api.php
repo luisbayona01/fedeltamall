@@ -25,5 +25,8 @@ Route::get('tiendascategoria', [App\Http\Controllers\CategoriatiendaController::
 Route::get('tiendas', [App\Http\Controllers\TiendaController::class, 'Showall']);
 Route::post('productostienda', [App\Http\Controllers\ProductoController::class ,'allproductTienda']);
 Route::post('categoriasproductosTienda',[App\Http\Controllers\CategoriaproductoController::class,'allcategoriaTienda']);
-
-
+Route::post('addordencompra',[App\Http\Controllers\OrdendecompraController::class, 'addordencompra']);
+Route::post('showcarrito',[App\Http\Controllers\OrdendecompraController::class, 'showord']);
+Route::post('edidcantidad',[App\Http\Controllers\OrdendecompraController::class, 'edidcantidad']);
+Route::post('deleteproducord',[App\Http\Controllers\OrdendecompraController::class, 'deleteorden']);
+Route::post('auth/recovery',[App\Http\Controllers\Api\AuthController::class,'recoverypass']);
