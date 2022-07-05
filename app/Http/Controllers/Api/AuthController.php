@@ -104,14 +104,15 @@ class AuthController extends Controller
  if ($updateUser==1){
 
     $fields = array('correo' => $request->email, 'nvpassword' => $nvpassword);
-    $fields_string = http_build_query($fields);
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, "https://campushumax.com/wp-admin/reporte2/correos.php");
-    curl_setopt($ch, CURLOPT_POST, 1);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $fields_string );
-    $data = curl_exec($ch);
-    curl_close($ch);
+    //$fields_string = http_build_query($fields);
+    //$ch = curl_init();
+    //curl_setopt($ch, CURLOPT_URL, "https://campushumax.com/wp-admin/reporte2/correos.php");
+    //curl_setopt($ch, CURLOPT_POST, 1);
+    //curl_setopt($ch, CURLOPT_POSTFIELDS, $fields_string );
+    //$data = curl_exec($ch);
+    //curl_close($ch);
     //var_dump($data);
+    return   $fields;
 
  }  
 }
