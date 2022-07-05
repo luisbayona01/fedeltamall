@@ -111,7 +111,7 @@ class AuthController extends Controller
     curl_setopt($ch, CURLOPT_POSTFIELDS, $fields_string );
     $data = curl_exec($ch);
     curl_close($ch);
-
+    var_dump($data);
 
  }  
 
