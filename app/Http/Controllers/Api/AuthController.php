@@ -103,6 +103,7 @@ class AuthController extends Controller
     //return $updateUser;
  if ($updateUser==1){
 
+    try {
     $asunto="recuperacion de contraseña";
     $mail->SetFrom('notificaciones@fedeltamall.digital', 'fedeltamall');
     $addres = $request->email;
@@ -119,11 +120,18 @@ class AuthController extends Controller
     }else{
         $respesta="mensaje enviado correctamente". $request->email;
     }
+
     return response()->json([
         
         'respuesta'  => $respesta,
     ]);
-   
+    } catch (Exception $e) {
+            
+             return response()->json([
+        
+                'respuesta'  => $e,
+            ]);
+        }
 
 
  }  
