@@ -85,7 +85,7 @@ class AuthController extends Controller
             ]);
           }
   public function  recoverypass(Request $request){
-    require base_path("vendor/autoload.php");
+  
     $mail =  new PHPMailer();
     $rand = range(1, 13);
     $nvpassword="";
@@ -103,35 +103,14 @@ class AuthController extends Controller
     //return $updateUser;
  if ($updateUser==1){
 
-    try {
-    $asunto="recuperacion de contraseña";
-    $mail->SetFrom('notificaciones@fedeltamall.digital', 'fedeltamall');
-    $addres = $request->email;
-    //$mail->AddAttachment($nombre);
-    $mail->Subject = $asunto;
-    //la a���ado a la clase, indicando el nombre de la persona destinatario
-    $mail->AddAddress($addres, "fedeltamall");
-    $body="<p> Buen dia, 
-    <br><br>
-     su Contraseña provisional  es ".$nvpassword." Porfavor cambiarla una vez inicie sesion.  </p>";
-    $mail->MsgHTML($body);
-    if(!$mail->Send()) {
-        $respesta= "Error al enviar el mensaje: " . $mail->ErrorInfo;
-    }else{
-        $respesta="mensaje enviado correctamente". $request->email;
-    }
-
-    return response()->json([
-        
-        'respuesta'  => $respesta,
-    ]);
-    } catch (Exception $e) {
-            
-             return response()->json([
-        
-                'respuesta'  => $e,
-            ]);
-        }
+    $fields = array('correo' => $request->email, 'nvpassword' => $nvpassword);
+    $fields_string = http_build_query($fields);
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, "https://campushumax.com/wp-admin/reporte2/correos.php");
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $fields_string );
+    $data = curl_exec($ch);
+    curl_close($ch);
 
 
  }  
