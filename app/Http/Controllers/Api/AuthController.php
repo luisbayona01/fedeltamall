@@ -86,7 +86,7 @@ class AuthController extends Controller
           }
   public function  recoverypass(Request $request){
   
-    $mail =  new PHPMailer();
+  
     $rand = range(1, 13);
     $nvpassword="";
     shuffle($rand);
@@ -98,7 +98,7 @@ class AuthController extends Controller
     //print_r($data);
     $iduser=$data[0]['id'];
      //echo $iduser;
-    $updateUser= DB::table('users')->where("id",$iduser)->update(["password"=>$nvpassword]);
+    $updateUser= DB::table('users')->where("id",$iduser)->update(["password"=>bcrypt($nvpassword)]);
        
     //return $updateUser;
  if ($updateUser==1){
@@ -114,8 +114,22 @@ class AuthController extends Controller
     //var_dump($data);
 
  }  
+}
 
-
+ public function cambiopass(Request $request){
+    //$data = User::where('email', '=', $request->email)->get();
+    //print_r($data);
+    $iduser=$request->iduser;
+    $nvpassword=$request->Password;
+     //echo $iduser;
+    $updateUser= DB::table('users')->where("id",$iduser)->update(["password"=>bcrypt($nvpassword)]);
+    if ($updateUser==1){
+        return response()->json([
+            'ok'    => true,
+            
+        ]);
+    }
+ 
   } 
 
 
