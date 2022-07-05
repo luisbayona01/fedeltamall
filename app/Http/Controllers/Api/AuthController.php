@@ -104,12 +104,12 @@ class AuthController extends Controller
  if ($updateUser==1){
 
     $asunto="recuperacion de contraseña";
-    $mail->SetFrom('notificaciones@fedeltamall.com', 'fedeltamall');
+    $mail->SetFrom('notificaciones@fedeltamall.digital', 'fedeltamall');
     $addres = $request->email;
     //$mail->AddAttachment($nombre);
     $mail->Subject = $asunto;
     //la a���ado a la clase, indicando el nombre de la persona destinatario
-    $mail->AddAddress($addres, "Fedeltamall");
+    $mail->AddAddress($addres, "fedeltamall");
     $body="<p> Buen dia, 
     <br><br>
      su Contraseña provisional  es ".$nvpassword." Porfavor cambiarla una vez inicie sesion.  </p>";
