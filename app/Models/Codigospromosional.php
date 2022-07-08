@@ -17,8 +17,7 @@ use Illuminate\Database\Eloquent\Model;
  * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class Codigospromosional extends Model
-{
-    
+{   protected $table = 'codigospromosional';
     static $rules = [
 		'idcodigospromosional' => 'required',
     ];

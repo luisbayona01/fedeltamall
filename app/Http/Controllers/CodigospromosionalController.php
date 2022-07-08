@@ -109,7 +109,7 @@ class CodigospromosionalController extends Controller
 
 
     public function all(){
-       $codigospromosional= Codigospromosional::all();
+       $codigospromosional= codigospromosional::all();
        return $codigospromosional;
     }
 }
