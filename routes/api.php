@@ -31,4 +31,9 @@ Route::post('edidcantidad',[App\Http\Controllers\OrdendecompraController::class,
 Route::post('deleteproducord',[App\Http\Controllers\OrdendecompraController::class, 'deleteorden']);
 Route::post('auth/recovery',[App\Http\Controllers\Api\AuthController::class,'recoverypass']);
 Route::post('auth/resetpassword',[App\Http\Controllers\Api\AuthController::class,'cambiopass']);
+Route::get('promociones',[App\Http\Controllers\CodigospromosionalController::class,'all']);
+
+
+
+
 
