@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Tienda;
 use Illuminate\Http\Request;
-
+use App\Models\Categoriatienda;
 /**
  * Class TiendaController
  * @package App\Http\Controllers
@@ -14,40 +14,52 @@ class TiendaController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     
      */
     public function index()
     {
-        $tiendas = Tienda::paginate();
-
-        return view('tienda.index', compact('tiendas'))
-            ->with('i', (request()->input('page', 1) - 1) * $tiendas->perPage());
+        //$tiendas = Tienda::paginate();
+        $tiendas=Tienda::join('categoriatiendas', 'categoriatiendas.idcategoriatienda', '=', 'tiendas.tiendacategoria')
+        
+        ->get(['tiendas.*', 'categoriatiendas.nombre as tiendacategorias']);
+      
+        return view('tienda.index', compact('tiendas'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+   
     public function create()
     {
         $tienda = new Tienda();
-        return view('tienda.create', compact('tienda'));
+        $categoriasTienda=Categoriatienda::all();
+        return view('tienda.create', compact('tienda','categoriasTienda'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
+     
     public function store(Request $request)
-    {
-        request()->validate(Tienda::$rules);
+    {   request()->validate(Tienda::$rules);
+        $file = $request->file('file');
 
-        $tienda = Tienda::create($request->all());
+        //obtenemos el nombre del archivo
+        $nombre = $file->getClientOriginalName();
+       
+        //indicamos que queremos guardar un nuevo archivo en el disco local
+        \Storage::disk('logos')->put($nombre,  \File::get($file));
+         $public_path = base_path();
+         //$filename = $public_path.'/storage/app/public/imagenes'.$nombre;
+         $imagen=  request()->getSchemeAndHttpHost()."/fedeltamall/storage/app/public/logostiendas/$nombre";
+       //die();
+      
 
-        return redirect()->route('tiendas.index')
+
+ 
+
+        $tienda = Tienda::create([
+        'nombre'=>$request->nombre,
+        'logo'=> $imagen,
+        'tiendacategoria'=>$request->categoriatienda
+        ]);
+
+        return redirect()->route('tiendas')
             ->with('success', 'Tienda created successfully.');
     }
 
@@ -64,17 +76,13 @@ class TiendaController extends Controller
         return view('tienda.show', compact('tienda'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        $tienda = Tienda::find($id);
 
-        return view('tienda.edit', compact('tienda'));
+    public function edit($id)
+    { 
+        $tienda = Tienda::find($id);
+        $categoriasTienda=Categoriatienda::all();
+
+      return view('tienda.edit', compact('tienda','categoriasTienda'));
     }
 
 
@@ -83,33 +91,53 @@ class TiendaController extends Controller
     return $tiendas; 
 
     }
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  Tienda $tienda
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Tienda $tienda)
+    
+ 
+    public function update(Request $request)
     {
-        request()->validate(Tienda::$rules);
+        $file = $request->file('file');
+        $id=$request->input('idtiendas');
+        $tiendas =Tienda::find($id);
+        if(!is_null($file)){
+            $file = $request->file('file');
 
-        $tienda->update($request->all());
+        //obtenemos el nombre del archivo
+        $nombre = $file->getClientOriginalName();
+       
+        //indicamos que queremos guardar un nuevo archivo en el disco local
+        \Storage::disk('logos')->put($nombre,  \File::get($file));
+         $public_path = base_path();
+         //$filename = $public_path.'/storage/app/public/imagenes'.$nombre;
+         $imagen=  request()->getSchemeAndHttpHost()."/fedeltamall/storage/app/public/logostiendas/$nombre";
+             $tiendas->nombre=$request->nombre;
+             
+             $tiendas->logo=$imagen;
+            
+             $tiendas->tiendacategoria=$request->idtiendas;
+           
+        }else{
 
-        return redirect()->route('tiendas.index')
-            ->with('success', 'Tienda updated successfully');
+            $tiendas->nombre=$request->nombre;
+             
+           $tiendas->tiendacategoria=$request->idtiendas;
+        }
+
+
+        if($tiendas->save()){
+
+            return redirect()->route('tiendas')->with('success', 'tienda created successfully.');
+        }
     }
-
-    /**
+/**
      * @param int $id
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Exception
      */
     public function destroy($id)
-    {
+    {  
         $tienda = Tienda::find($id)->delete();
 
-        return redirect()->route('tiendas.index')
+        return redirect()->route('tiendas')
             ->with('success', 'Tienda deleted successfully');
     }
 }

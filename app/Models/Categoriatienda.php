@@ -19,16 +19,20 @@ class Categoriatienda extends Model
 {
     
     static $rules = [
-		'idcategoriatienda' => 'required',
+		'nombre' => 'required',
     ];
 
-    protected $perPage = 20;
+  
+
+    public $timestamps = false;     
+    
+    protected $primaryKey = 'idcategoriatienda';
 
     /**
      * Attributes that should be mass-assignable.
      *
      * @var array
-     */
+     */ 
     protected $fillable = ['idcategoriatienda','imagencategoria','nombre'];
 
 

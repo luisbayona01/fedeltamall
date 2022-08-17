@@ -20,7 +20,8 @@ class Categoriaproducto extends Model
 {
     
     static $rules = [
-		'idcategoria' => 'required',
+		'categoria' => 'required',
+       
     ];
 
     protected $perPage = 20;
@@ -30,6 +31,10 @@ class Categoriaproducto extends Model
      *
      * @var array
      */
+
+    public $timestamps = false;     
+    
+    protected $primaryKey = 'idcategoria';
     protected $fillable = ['idcategoria','categoria','idtiendacategoriap'];
 
 

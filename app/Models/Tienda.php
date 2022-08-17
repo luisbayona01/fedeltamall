@@ -23,10 +23,15 @@ class Tienda extends Model
 {
     
     static $rules = [
-		'idtiendas' => 'required',
+		'nombre' => 'required',
     ];
 
-    protected $perPage = 20;
+
+    public $timestamps = false;     
+    
+    protected $primaryKey = 'idtiendas';
+
+    //protected $perPage = 20;
 
     /**
      * Attributes that should be mass-assignable.

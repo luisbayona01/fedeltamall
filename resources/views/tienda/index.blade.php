@@ -1,8 +1,10 @@
-@extends('layouts.app')
+@extends('adminlte::page')
 
-@section('template_title')
-    Tienda
-@endsection
+@section('title', 'Dashboard')
+
+@section('content_header')
+    <h1>Tiendas</h1>
+@stop
 
 @section('content')
     <div class="container-fluid">
@@ -17,7 +19,7 @@
                             </span>
 
                              <div class="float-right">
-                                <a href="{{ route('tiendas.create') }}" class="btn btn-primary btn-sm float-right"  data-placement="left">
+                                <a href="{{ url('/createtienda') }}" class="btn btn-primary btn-sm float-right"  data-placement="left">
                                   {{ __('Create New') }}
                                 </a>
                               </div>
@@ -34,7 +36,7 @@
                             <table class="table table-striped table-hover">
                                 <thead class="thead">
                                     <tr>
-                                        <th>No</th>
+                                       
                                         
 										<th>Idtiendas</th>
 										<th>Nombre</th>
@@ -47,22 +49,26 @@
                                 <tbody>
                                     @foreach ($tiendas as $tienda)
                                         <tr>
-                                            <td>{{ ++$i }}</td>
+                                            
                                             
 											<td>{{ $tienda->idtiendas }}</td>
 											<td>{{ $tienda->nombre }}</td>
-											<td>{{ $tienda->logo }}</td>
-											<td>{{ $tienda->tiendacategoria }}</td>
+											<td>  <img src="{{ $tienda->logo }}" alt="{{ $tienda->nombre }}"class="img-thumbnail" width="80"  height="80"></td>
+											<td>{{ $tienda->tiendacategorias }}</td>
 
                                             <td>
-                                                <form action="{{ route('tiendas.destroy',$tienda->id) }}" method="POST">
-                                                    <a class="btn btn-sm btn-primary " href="{{ route('tiendas.show',$tienda->id) }}"><i class="fa fa-fw fa-eye"></i> Show</a>
-                                                    <a class="btn btn-sm btn-success" href="{{ route('tiendas.edit',$tienda->id) }}"><i class="fa fa-fw fa-edit"></i> Edit</a>
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-fw fa-trash"></i> Delete</button>
-                                                </form>
-                                            </td>
+                                            
+                                                <form method="GET" action="{{url('editTiendas',$tienda->idtiendas)}}">
+                                                  <button  type="submit" class="btn btn-secondary">editar</button>
+                                                </form> 
+                                              </td>
+                                              <td>
+                                              
+                                                  <form method="POST" action="{{url('Tiendasdelete', $tienda->idtiendas )}}">
+                                                      @csrf
+                                                    <button  type="submit" class="btn btn-danger">eliminar</button>
+                                                  </form> 
+                                                </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -70,7 +76,7 @@
                         </div>
                     </div>
                 </div>
-                {!! $tiendas->links() !!}
+             
             </div>
         </div>
     </div>

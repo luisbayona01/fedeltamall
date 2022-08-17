@@ -28,11 +28,15 @@ return [
     |
     */
 
-    'disks' => [
+    'disks' => [ 
 
         'local' => [
             'driver' => 'local',
-            'root' => storage_path('app'),
+            'root' => storage_path('app/public/imagenes'),
+        ],
+        'logos' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/logostiendas'),
         ],
 
         'public' => [

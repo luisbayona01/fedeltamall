@@ -25,12 +25,18 @@ class Producto extends Model
 {
     
     static $rules = [
-		'idproductos' => 'required',
+		
 		'idtienda' => 'required',
+        'nombre' => 'required',
+        'descripcion' => 'required',
+        'precio' => 'required'
+
     ];
 
     protected $perPage = 20;
-
+    public $timestamps = false;     
+    
+    protected $primaryKey = 'idproductos';
     /**
      * Attributes that should be mass-assignable.
      *

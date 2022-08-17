@@ -1,8 +1,11 @@
-@extends('layouts.app')
+@extends('adminlte::page')
+@section('title', 'Dashboard')
 
-@section('template_title')
-    Update Categoriatienda
-@endsection
+@section('content_header')
+Update Categoriatienda
+@stop
+    
+
 
 @section('content')
     <section class="content container-fluid">
@@ -16,10 +19,10 @@
                         <span class="card-title">Update Categoriatienda</span>
                     </div>
                     <div class="card-body">
-                        <form method="POST" action="{{ route('categoriatiendas.update', $categoriatienda->id) }}"  role="form" enctype="multipart/form-data">
-                            {{ method_field('PATCH') }}
+                        <form method="POST" action="{{ url('updateCategoriatienda' ) }}"  role="form" enctype="multipart/form-data">
+                          
                             @csrf
-
+                            <input type="hidden" name="categoriatiendaid" value="{{$categoriatienda->idcategoriatienda}}">    
                             @include('categoriatienda.form')
 
                         </form>
