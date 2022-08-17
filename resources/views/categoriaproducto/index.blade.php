@@ -1,8 +1,11 @@
-@extends('layouts.app')
+@extends('adminlte::page')
+@section('title', 'Dashboard')
 
-@section('template_title')
-    Categoriaproducto
-@endsection
+@section('content_header')
+    <h1> Categoriaproducto</h1>
+@stop
+   
+
 
 @section('content')
     <div class="container-fluid">
@@ -17,13 +20,13 @@
                             </span>
 
                              <div class="float-right">
-                                <a href="{{ route('categoriaproductos.create') }}" class="btn btn-primary btn-sm float-right"  data-placement="left">
+                               <a href= "{{ url ('categoriaproductocrear')}}" class="btn btn-primary btn-sm float-right"  data-placement="left">
                                   {{ __('Create New') }}
                                 </a>
                               </div>
                         </div>
                     </div>
-                    @if ($message = Session::get('success'))
+                     @if ($message = Session::get('success'))
                         <div class="alert alert-success">
                             <p>{{ $message }}</p>
                         </div>
@@ -34,11 +37,11 @@
                             <table class="table table-striped table-hover">
                                 <thead class="thead">
                                     <tr>
-                                        <th>No</th>
+                                     
                                         
 										<th>Idcategoria</th>
 										<th>Categoria</th>
-										<th>Idtiendacategoriap</th>
+										<th>tienda</th>
 
                                         <th></th>
                                     </tr>
@@ -46,21 +49,25 @@
                                 <tbody>
                                     @foreach ($categoriaproductos as $categoriaproducto)
                                         <tr>
-                                            <td>{{ ++$i }}</td>
+                                            
                                             
 											<td>{{ $categoriaproducto->idcategoria }}</td>
 											<td>{{ $categoriaproducto->categoria }}</td>
-											<td>{{ $categoriaproducto->idtiendacategoriap }}</td>
+											<td>{{ $categoriaproducto->tiendas }}</td>
 
                                             <td>
-                                                <form action="{{ route('categoriaproductos.destroy',$categoriaproducto->id) }}" method="POST">
-                                                    <a class="btn btn-sm btn-primary " href="{{ route('categoriaproductos.show',$categoriaproducto->id) }}"><i class="fa fa-fw fa-eye"></i> Show</a>
-                                                    <a class="btn btn-sm btn-success" href="{{ route('categoriaproductos.edit',$categoriaproducto->id) }}"><i class="fa fa-fw fa-edit"></i> Edit</a>
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-fw fa-trash"></i> Delete</button>
-                                                </form>
-                                            </td>
+                                            
+                                                <form method="GET" action="{{url('editcategorias',$categoriaproducto->idcategoria )}}">
+                                                  <button  type="submit" class="btn btn-secondary">editar</button>
+                                                </form> 
+                                              </td>
+                                              <td>
+                                              
+                                                  <form method="POST" action="{{url('categoriasdelete', $categoriaproducto->idcategoria )}}">
+                                                      @csrf
+                                                    <button  type="submit" class="btn btn-danger">eliminar</button>
+                                                  </form> 
+                                                </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -68,7 +75,7 @@
                         </div>
                     </div>
                 </div>
-                {!! $categoriaproductos->links() !!}
+               {{--{!! $categoriaproductos->links() !!}--}}
             </div>
         </div>
     </div>

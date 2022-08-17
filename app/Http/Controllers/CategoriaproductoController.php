@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Categoriaproducto;
+use App\Models\Tienda;
 use Illuminate\Http\Request;
 
 /**
@@ -14,25 +15,34 @@ class CategoriaproductoController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     //* @return \Illuminate\Http\Response
      */
     public function index()
     {
-        $categoriaproductos = Categoriaproducto::paginate();
+      
 
-        return view('categoriaproducto.index', compact('categoriaproductos'))
-            ->with('i', (request()->input('page', 1) - 1) * $categoriaproductos->perPage());
+       
+      
+        $categoriaproductos= Categoriaproducto::join('tiendas','tiendas.idtiendas','=','categoriaproductos.idtiendacategoriap')
+        ->where('categoriaproductos.idtiendacategoriap', '=',session('iduseradmintienda'))
+        ->get(['categoriaproductos.*', 'tiendas.nombre as tiendas']);
+        
+        //dd($categoriaproductos);
+        return view('categoriaproducto.index', compact('categoriaproductos'));
+            //->with('i', (request()->input('page', 1) - 1) * $categoriaproductos->perPage());
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     //* @return \Illuminate\Http\Response
      */
     public function create()
-    {
+    { 
         $categoriaproducto = new Categoriaproducto();
-        return view('categoriaproducto.create', compact('categoriaproducto'));
+        $tienda= Tienda::all();
+        // ->where('admninistradorestienda.idtienda', '=',session('iduseradmintienda'))
+        return view('categoriaproducto.create', compact('categoriaproducto','tienda'));
     }
 
     public function allcategoriaTienda(Request $request){
@@ -52,55 +62,45 @@ class CategoriaproductoController extends Controller
     public function store(Request $request)
     {
         request()->validate(Categoriaproducto::$rules);
+       
+        $categoriaproducto = Categoriaproducto::create([
+            'categoria'=>$request->categoria,
+            'idtiendacategoriap'=>$request->idtienda
+        ]);
 
-        $categoriaproducto = Categoriaproducto::create($request->all());
-
-        return redirect()->route('categoriaproductos.index')
-            ->with('success', 'Categoriaproducto created successfully.');
+        return redirect()->route('categoriaproductos')->with('success', 'Categoriaproducto created successfully.');
+       
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    /*public function show($id)
     {
         $categoriaproducto = Categoriaproducto::find($id);
 
         return view('categoriaproducto.show', compact('categoriaproducto'));
-    }
+    }*/
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
+    
     public function edit($id)
     {
         $categoriaproducto = Categoriaproducto::find($id);
-
-        return view('categoriaproducto.edit', compact('categoriaproducto'));
+        $tienda= Tienda::all();
+        return view('categoriaproducto.edit', compact('categoriaproducto','tienda'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  Categoriaproducto $categoriaproducto
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Categoriaproducto $categoriaproducto)
+    public function update(Request $request)
     {
-        request()->validate(Categoriaproducto::$rules);
+       // request()->validate(Categoriaproducto::$rules);
+        $id=$request->idcategoria;
 
-        $categoriaproducto->update($request->all());
+        $categoriaproducto =Categoriaproducto::find($id);;
+        $categoriaproducto->categoria=$request->categoria;
+        $categoriaproducto->idtiendacategoriap= $request->idtienda;
+        if($categoriaproducto->save()){
 
-        return redirect()->route('categoriaproductos.index')
-            ->with('success', 'Categoriaproducto updated successfully');
-    }
+            return redirect()->route('categoriaproductos')->with('success', 'Categoriaproducto created successfully.');
+        }
+        }
+        
 
     /**
      * @param int $id
@@ -111,7 +111,6 @@ class CategoriaproductoController extends Controller
     {
         $categoriaproducto = Categoriaproducto::find($id)->delete();
 
-        return redirect()->route('categoriaproductos.index')
-            ->with('success', 'Categoriaproducto deleted successfully');
+        return redirect()->route('categoriaproductos')->with('success', 'Categoriaproducto created successfully.');
     }
 }

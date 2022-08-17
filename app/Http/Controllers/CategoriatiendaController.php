@@ -11,24 +11,16 @@ use Illuminate\Http\Request;
  */
 class CategoriatiendaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    
     public function index()
     {
-        $categoriatiendas = Categoriatienda::paginate();
+        $categoriatiendas = Categoriatienda::all();
 
-        return view('categoriatienda.index', compact('categoriatiendas'))
-            ->with('i', (request()->input('page', 1) - 1) * $categoriatiendas->perPage());
+        return view('categoriatienda.index', compact('categoriatiendas'));
+            
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+   
     public function create()
     {
         $categoriatienda = new Categoriatienda();
@@ -51,29 +43,14 @@ class CategoriatiendaController extends Controller
 
         $categoriatienda = Categoriatienda::create($request->all());
 
-        return redirect()->route('categoriatiendas.index')
+        return redirect()->route('categoriatiendas')
             ->with('success', 'Categoriatienda created successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $categoriatienda = Categoriatienda::find($id);
+  
+ 
 
-        return view('categoriatienda.show', compact('categoriatienda'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
+    
     public function edit($id)
     {
         $categoriatienda = Categoriatienda::find($id);
@@ -88,13 +65,17 @@ class CategoriatiendaController extends Controller
      * @param  Categoriatienda $categoriatienda
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Categoriatienda $categoriatienda)
+    public function update(Request $request)
     {
-        request()->validate(Categoriatienda::$rules);
+        //request()->validate(Categoriatienda::$rules);
 
-        $categoriatienda->update($request->all());
+        $id=$request->categoriatiendaid;
+        $categoriatienda = Categoriatienda::find($id);
+        //dd($categoriatienda );
+        $categoriatienda->nombre=$request->nombre;
+        $categoriatienda->save();
 
-        return redirect()->route('categoriatiendas.index')
+        return redirect()->route('categoriatiendas')
             ->with('success', 'Categoriatienda updated successfully');
     }
 
@@ -107,7 +88,7 @@ class CategoriatiendaController extends Controller
     {
         $categoriatienda = Categoriatienda::find($id)->delete();
 
-        return redirect()->route('categoriatiendas.index')
+        return redirect()->route('categoriatiendas')
             ->with('success', 'Categoriatienda deleted successfully');
     }
 }

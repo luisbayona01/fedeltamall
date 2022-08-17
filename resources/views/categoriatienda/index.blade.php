@@ -1,8 +1,11 @@
-@extends('layouts.app')
+@extends('adminlte::page')
+@section('title', 'Dashboard')
 
-@section('template_title')
-    Categoriatienda
-@endsection
+@section('content_header')
+Categoriatienda
+@stop
+ 
+
 
 @section('content')
     <div class="container-fluid">
@@ -17,7 +20,7 @@
                             </span>
 
                              <div class="float-right">
-                                <a href="{{ route('categoriatiendas.create') }}" class="btn btn-primary btn-sm float-right"  data-placement="left">
+                                <a href="{{ url('createCategoriatienda') }}" class="btn btn-primary btn-sm float-right"  data-placement="left">
                                   {{ __('Create New') }}
                                 </a>
                               </div>
@@ -34,10 +37,10 @@
                             <table class="table table-striped table-hover">
                                 <thead class="thead">
                                     <tr>
-                                        <th>No</th>
+                                      
                                         
 										<th>Idcategoriatienda</th>
-										<th>Imagencategoria</th>
+										
 										<th>Nombre</th>
 
                                         <th></th>
@@ -46,21 +49,25 @@
                                 <tbody>
                                     @foreach ($categoriatiendas as $categoriatienda)
                                         <tr>
-                                            <td>{{ ++$i }}</td>
+                                           
                                             
 											<td>{{ $categoriatienda->idcategoriatienda }}</td>
-											<td>{{ $categoriatienda->imagencategoria }}</td>
+											
 											<td>{{ $categoriatienda->nombre }}</td>
 
                                             <td>
-                                                <form action="{{ route('categoriatiendas.destroy',$categoriatienda->id) }}" method="POST">
-                                                    <a class="btn btn-sm btn-primary " href="{{ route('categoriatiendas.show',$categoriatienda->id) }}"><i class="fa fa-fw fa-eye"></i> Show</a>
-                                                    <a class="btn btn-sm btn-success" href="{{ route('categoriatiendas.edit',$categoriatienda->id) }}"><i class="fa fa-fw fa-edit"></i> Edit</a>
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-fw fa-trash"></i> Delete</button>
-                                                </form>
-                                            </td>
+                                            
+                                                <form method="GET" action="{{url('editCategoriatienda', $categoriatienda->idcategoriatienda )}}">
+                                                  <button  type="submit" class="btn btn-secondary">editar</button>
+                                                </form> 
+                                              </td>
+                                              <td>
+                                              
+                                                  <form method="POST" action="{{url('Categoriatiendadelete', $categoriatienda->idcategoriatienda )}}">
+                                                      @csrf
+                                                    <button  type="submit" class="btn btn-danger">eliminar</button>
+                                                  </form> 
+                                                </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -68,7 +75,7 @@
                         </div>
                     </div>
                 </div>
-                {!! $categoriatiendas->links() !!}
+                
             </div>
         </div>
     </div>
